@@ -3,15 +3,7 @@ from pathlib import Path
 import pytest
 
 from ptc_server.services.llm_service import LLMService, LLMParseError
-from ptc_server.clients.llm.llm_client import LLMClient
-
-
-class MockLLMClient(LLMClient):
-    def __init__(self, response: str):
-        self._response = response
-
-    def get_model_response(self, prompt: str) -> str:
-        return self._response
+from tests.mocks.mock_llm_client import MockLLMClient
 
 
 def test_parse_response_as_json_with_example_model_response():

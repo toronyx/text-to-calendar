@@ -2,7 +2,9 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
-LOG_FILE = Path("logs/server.log")
+from ptc_core.file_helper import PROJECT_ROOT
+
+LOG_FILE = Path(PROJECT_ROOT / "logs" / "server.log")
 
 
 def setup_logging():
