@@ -15,6 +15,20 @@ dependencies = [
 ]
 
 
+# Tells Poetry which folders are packages
+[[tool.poetry.packages]]
+include = "ptc_client"
+from = "client"
+
+[[tool.poetry.packages]]
+include = "ptc_core"
+from = "core"
+
+[[tool.poetry.packages]]
+include = "ptc_server"
+from = "server"
+
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
