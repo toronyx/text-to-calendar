@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
+from ptc_server.logger_config import setup_logging
 from ptc_server.routes.endpoints import router
+
+setup_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
