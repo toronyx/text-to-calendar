@@ -3,6 +3,7 @@ import json
 import uuid
 
 from ptc_core.models.calendar_event import CalendarEvent
+from ptc_core.utils.date_utils import format_nice_date
 from ptc_server.clients.llm.llm_client import LLMClient
 from ptc_server.config import DOMAIN_NAME
 
@@ -24,6 +25,8 @@ class LLMService:
         Format everything exactly as JSON. Here is the input:
 
         {prompt}
+
+        And for reference today is {format_nice_date(datetime.now())}
         """
 
         output_text = self.client.get_model_response(llm_prompt)

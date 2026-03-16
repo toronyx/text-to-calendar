@@ -1,14 +1,16 @@
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
+from ptc_server.clients.llm.gemini_client import GeminiClient
 from ptc_server.logger_config import setup_logging
 from ptc_server.routes.endpoints import router
+from ptc_server.services.llm_service import LLMService
 
 setup_logging()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # TODO 16-Mar-2026 load any services here
+    app.state.llm_service = LLMService(GeminiClient())
     try:
         yield  # app runs here
     finally:

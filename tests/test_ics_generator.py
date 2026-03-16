@@ -18,7 +18,7 @@ def test_calendar_to_ics_matches_fixture():
         status="CONFIRMED",
     )
     calendar = Calendar(prodid="-//test//EN", method=None, events=[event])
-    output = calendar_to_ics(calendar, prodid="-//test//EN")
+    output = calendar_to_ics(calendar)
 
     expected_path = Path(__file__).resolve().parents[0] / "fixtures" / "example_calendar.ics"
     expected = expected_path.read_text(encoding="utf-8").replace("\r\n", "\n").strip()

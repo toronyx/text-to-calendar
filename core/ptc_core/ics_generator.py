@@ -29,11 +29,11 @@ def calendar_event_to_ics(event: CalendarEvent) -> str:
     return "\r\n".join(lines)
 
 
-def calendar_to_ics(calendar: Calendar, prodid: Optional[str] = ICS_PRODID) -> str:
+def calendar_to_ics(calendar: Calendar) -> str:
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        f"PRODID:{prodid}",
+        f"PRODID:{calendar.prodid}",
         f"CALSCALE:{calendar.calscale}",
     ]
     if calendar.method:
