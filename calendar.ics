@@ -1,0 +1,57 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:Europe/London
+X-LIC-LOCATION:Europe/London
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0000
+TZOFFSETTO:+0100
+TZNAME:GMT+1
+DTSTART:19700329T010000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0000
+TZNAME:GMT
+DTSTART:19701025T020000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=Europe/London:20260309T201500
+DTEND;TZID=Europe/London:20260309T220000
+DTSTAMP:20260316T204526Z
+ORGANIZER;CN=Tommi Ronayne:mailto:tomronayne2580@gmail.com
+UID:64r6cdr36ko68b9kccoj4b9kcgojgbb161gjgb9lccqj2cph6kp3edj264@google.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=
+ TRUE;CN=tommi.ronayne@taurho.co.uk;X-NUM-GUESTS=0:mailto:tommi.ronayne@taur
+ ho.co.uk
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE
+ ;CN=Tommi Ronayne;X-NUM-GUESTS=0:mailto:tomronayne2580@gmail.com
+X-GOOGLE-CONFERENCE:https://meet.google.com/qpz-wntn-tmv
+X-MICROSOFT-CDO-OWNERAPPTID:-1601085879
+CREATED:20260308T130358Z
+DESCRIPTION:https://www.swingland.com/a-train/20260309/\n\n-::~:~::~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-\nJo
+ in with Google Meet: https://meet.google.com/qpz-wntn-tmv\n\nLearn more abo
+ ut Meet at: https://support.google.com/a/users/answer/9282720\n\nPlease do 
+ not edit this section.\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20260316T204522Z
+LOCATION:Hammersmith Club Society Ltd\, 11 Rutland Grove\, London W6 9DH\, 
+ Vereinigtes Königreich\; https://meet.google.com/qpz-wntn-tmv
+SEQUENCE:2
+STATUS:CONFIRMED
+SUMMARY:A-Train @ The Hammersmith Club (intermediates class)
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:This is an event reminder
+TRIGGER:-P0DT0H30M0S
+END:VALARM
+END:VEVENT
+END:VCALENDAR

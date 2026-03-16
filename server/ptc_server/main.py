@@ -5,13 +5,15 @@ from ptc_server.routes.endpoints import router
 
 setup_logging()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # TODO 16-Mar-2026 load any services here
     try:
-        yield # app runs here
+        yield  # app runs here
     finally:
-        pass # do any cleanup
+        pass  # do any cleanup
+
 
 app = FastAPI(title="Job Hunt Automation API", lifespan=lifespan)
 

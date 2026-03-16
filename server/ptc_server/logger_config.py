@@ -1,7 +1,9 @@
 import logging
+from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
-LOG_FILE = Path("logs/prompt-to-calendar.log")
+LOG_FILE = Path("logs/server.log")
+
 
 def setup_logging():
     LOG_FILE.parent.mkdir(exist_ok=True)
@@ -10,15 +12,23 @@ def setup_logging():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+
     # Console handler
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
-    ch_formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-    ch.setFormatter(ch_formatter)
+    ch.setFormatter(formatter)
     logger.addHandler(ch)
 
-    # File handler
-    fh = logging.FileHandler(LOG_FILE)
-    fh.setLevel(logging.INFO)
-    fh.setFormatter(ch_formatter)
+    # Rotating file handler
+    fh = TimedRotatingFileHandler(
+        LOG_FILE,
+        when="midnight",  # rotate daily
+        interval=1,
+    )
+    fh.setFormatter(formatter)
     logger.addHandler(fh)
+
+    for name in ("uvicorn", "uvicorn.error", "uvicorn.access"):
+        logger = logging.getLogger(name)
+        logger.addHandler(fh)

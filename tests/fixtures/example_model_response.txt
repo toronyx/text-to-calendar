@@ -1,0 +1,9 @@
+```json
+{
+  "start": "20260330T140000Z",
+  "end": "20260330T160000Z",
+  "summary": "Birthday Party",
+  "description": "Come celebrate my birthday!",
+  "location": "London Eye"
+}
+```
