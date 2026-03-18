@@ -22,17 +22,15 @@ def root() -> dict[str, str]:
     }
 
 
-@router.post("/prompt_to_calendar_event_object/")
-def prompt_to_calendar_event_object(
-    llm_service: Annotated[LLMService, Depends(get_llm_service)], prompt: str
-) -> CalendarEvent:
-    calendar_event = llm_service.calendar_event_from_prompt(prompt)
-    return calendar_event
+@router.post("/prompt_to_calendar_object/")
+def prompt_to_calendar_object(llm_service: Annotated[LLMService, Depends(get_llm_service)], prompt: str) -> Calendar:
+    calendar_events = llm_service.calendar_events_from_prompt(prompt)
+    calendar = Calendar(prodid=ICS_PRODID, method=None, events=calendar_events)
+    return calendar
 
 
-@router.post("/calendar_event_to_ics_file/")
-def calendar_event_to_ics_file(calendar_event: CalendarEvent):
-    calendar = Calendar(prodid=ICS_PRODID, method=None, events=[calendar_event])
+@router.post("/calendar_to_ics_file/")
+def calendar_to_ics_file(calendar: Calendar):
     ics_data = calendar_to_ics(calendar)
 
     generated_files_dir = Path(__file__).parent.parent / "generated"

@@ -1,7 +1,7 @@
-import re
+import random
+import string
 
 
-def to_snake_case(s):  # TODO 18-Mar-2026 test this function
-    s = re.sub(r"[\-\s]+", "_", s)  # replace spaces/dashes
-    s = re.sub(r"(?<!^)(?=[A-Z])", "_", s)  # split CamelCase
-    return s.lower()
+def random_string(length=12):
+    characters = string.ascii_letters + string.digits
+    return "".join(random.choice(characters) for _ in range(length))

@@ -18,6 +18,6 @@ async def lifespan(app: FastAPI):
         pass  # do any cleanup
 
 
-app = FastAPI(title="Job Hunt Automation API", lifespan=lifespan)
+app = FastAPI(title="Text to Calendar API", lifespan=lifespan)
 
 app.include_router(router)

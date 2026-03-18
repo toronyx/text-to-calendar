@@ -1,9 +1,7 @@
 from datetime import datetime
-from typing import Optional
 
 from ttc_core.models.calendar import Calendar
 from ttc_core.models.calendar_event import CalendarEvent
-from ttc_server.config import ICS_PRODID
 
 
 def _format_datetime(dt: datetime) -> str:

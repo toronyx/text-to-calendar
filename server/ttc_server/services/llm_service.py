@@ -2,8 +2,9 @@ from datetime import datetime
 import json
 import uuid
 
+from ttc_core.models.calendar import Calendar
 from ttc_core.models.calendar_event import CalendarEvent
-from ttc_core.utils.date_utils import format_nice_date
+from ttc_core.utils.date_utils import format_nice_date, format_nice_time
 from ttc_server.clients.llm.llm_client import LLMClient
 from ttc_server.config import DOMAIN_NAME
 
@@ -17,31 +18,44 @@ class LLMService:
     def __init__(self, client: LLMClient):
         self.client = client
 
-    def calendar_event_from_prompt(self, prompt: str) -> CalendarEvent:
+    def calendar_events_from_prompt(self, prompt: str) -> list[CalendarEvent]:
         llm_prompt = f"""
         Convert the following natural language into a JSON calendar event with these fields:
         start, end, summary, description, location.
         start and end should be in compact UTC format: YYYYMMDDTHHMMSSZ
+        If the text is describing multiple events, return a list of JSON objects.
         Format everything exactly as JSON. Here is the input:
 
         {prompt}
 
-        And for reference today is {format_nice_date(datetime.now())}
+        And for reference it is currently {format_nice_date(datetime.now())}, {format_nice_time(datetime.now())}
         """
 
         output_text = self.client.get_model_response(llm_prompt)
         event_data = self._parse_response_as_json(output_text)
-        return self._convert_json_to_calendar_event(event_data)
+        if isinstance(event_data, dict):
+            event_data = [event_data]
+        return self._convert_json_to_calendar_events(event_data)
 
-    def _parse_response_as_json(self, output_text: str) -> json:
+    def _parse_response_as_json(self, output_text: str) -> dict | list[dict]:
+        is_list = "[" in output_text and "]" in output_text
         try:
-            json_output = "{" + output_text.split("{")[1].split("}")[0] + "}"
+            if is_list:
+                json_output = "[" + output_text.split("[")[1].split("]")[0] + "]"
+            else:
+                json_output = "{" + output_text.split("{")[1].split("}")[0] + "}"
             json_data = json.loads(json_output)
         except json.JSONDecodeError, IndexError:
             raise LLMParseError(f"LLM returned invalid JSON: {output_text}")
         return json_data
 
-    def _convert_json_to_calendar_event(self, json_data: json) -> CalendarEvent:
+    def _convert_json_to_calendar_events(self, json_data: list[dict]) -> list[CalendarEvent]:
+        output_list = []
+        for element in json_data:
+            output_list.append(self._convert_json_to_calendar_event(element))
+        return output_list
+
+    def _convert_json_to_calendar_event(self, json_data: dict) -> CalendarEvent:
         json_data["uid"] = f"{uuid.uuid4()}@{DOMAIN_NAME}"
         json_data["dtstamp"] = datetime.now()
         json_data["status"] = "CONFIRMED"
