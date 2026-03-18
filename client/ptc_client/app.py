@@ -13,26 +13,6 @@ def create_ics_from_event(event: CalendarEvent) -> str:
     return response.text
 
 
-@st.fragment
-def editable_text_field(label: str, value: str, label_visibility: str = "visible", icon=None):
-    edit_mode_name = f"{label}_text_box_edit_mode"
-    text_name = f"{label}_text_box_text"
-    if edit_mode_name not in st.session_state:
-        st.session_state[edit_mode_name] = False
-    if text_name not in st.session_state:
-        st.session_state[text_name] = value
-
-    if st.session_state[edit_mode_name]:
-        st.session_state[text_name] = st.text_input(
-            label, st.session_state[text_name], label_visibility=label_visibility
-        )
-        if st.button("Save"):
-            st.session_state[edit_mode_name] = False
-    else:
-        if st.button(st.session_state[text_name], type="tertiary", icon=icon):
-            st.session_state[edit_mode_name] = True
-
-
 st.set_page_config(
     page_title="Prompt to Calendar",
     page_icon=":calendar:",
