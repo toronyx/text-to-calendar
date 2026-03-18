@@ -17,7 +17,7 @@ router = APIRouter()
 @router.get("/")
 def root() -> dict[str, str]:
     return {
-        "message": "Welcome to the prompt to calendar API!",
+        "message": "Welcome to the text to calendar API!",
         "version": "0.1.0",
     }
 

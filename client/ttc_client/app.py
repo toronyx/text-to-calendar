@@ -15,7 +15,7 @@ def create_ics_from_event(event: CalendarEvent) -> str:
 
 
 st.set_page_config(
-    page_title="Prompt to Calendar",
+    page_title="Text to Calendar",
     page_icon=":calendar:",
     menu_items={
         "About": "Tool to convert plaintext into a calendar event!",
@@ -23,7 +23,7 @@ st.set_page_config(
     },
 )
 
-st.title("📆 Prompt to Calendar")
+st.title("📆 Text to Calendar")
 
 user_input = st.text_area(
     "Paste your text below!", placeholder="e.g. take the dog for a walk this evening...", height=150
