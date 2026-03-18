@@ -1,3 +1,4 @@
+from ttc_client.helpers import random_placeholder
 from ttc_core.models.calendar import Calendar
 from ttc_core.utils.date_utils import format_date_range
 import streamlit as st
@@ -20,9 +21,10 @@ st.set_page_config(
         "About": "Tool to convert plaintext into a calendar event!",
         "Report a Bug": "mailto:dev@taurho.co.uk",
     },
+    initial_sidebar_state="collapsed",
 )
 
-st.title("📆 Text to Calendar")
+st.title("📆 Text to Calendar", help="To read more about Text to Calendar, open the sidebar!")
 
 st.sidebar.header("Features")
 st.sidebar.text("When Text to Calendar makes a calendar event, it extracts all kind of useful info, including:")
@@ -30,9 +32,9 @@ features = ["Event title", "Description", "Start/end time", "Location"]
 st.sidebar.markdown("- " + "\n- ".join(features))
 st.sidebar.text("As well as supporting multiple events extracted from a single piece of text!")
 
-user_input = st.text_area(
-    "Paste your text below!", placeholder="e.g. take the dog for a walk this evening...", height=150
-)
+if "placeholder" not in st.session_state:
+    st.session_state["placeholder"] = random_placeholder()
+user_input = st.text_area("Paste your text below!", placeholder=st.session_state["placeholder"], height="content")
 
 if st.button("Convert to Calendar", type="primary"):
     if user_input.strip():
