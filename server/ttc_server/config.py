@@ -12,5 +12,6 @@ ICS_PRODID = "-//text-to-calendar//EN"
 load_dotenv(PROJECT_ROOT / ".env")  # loads variables from .env into environment
 
 
+TTC_API_URL = os.getenv("TTC_API_URL")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DOMAIN_NAME = os.getenv("DOMAIN_NAME")

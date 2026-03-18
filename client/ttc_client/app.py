@@ -3,13 +3,12 @@ from ttc_core.utils.date_utils import format_date_range
 import streamlit as st
 import requests
 from streamlit.string_util import to_snake_case
-
-API_URL = "http://localhost:8001"  # TODO 17-Mar-2026 move this somewhere better
+from ttc_server.config import TTC_API_URL
 
 
 @st.cache_data
 def create_ics_from_event(event: CalendarEvent) -> str:
-    response = requests.post(f"{API_URL}/calendar_event_to_ics_file/", json=event.model_dump(mode="json"))
+    response = requests.post(f"{TTC_API_URL}/calendar_event_to_ics_file/", json=event.model_dump(mode="json"))
     response.raise_for_status()
     return response.text
 
@@ -33,7 +32,9 @@ if st.button("Convert to Calendar", type="primary"):
     if user_input.strip():
         try:
             with st.spinner("Creating your event..."):
-                response = requests.post(f"{API_URL}/prompt_to_calendar_event_object/", params={"prompt": user_input})
+                response = requests.post(
+                    f"{TTC_API_URL}/prompt_to_calendar_event_object/", params={"prompt": user_input}
+                )
             response.raise_for_status()
 
             calendar_event = CalendarEvent.model_validate(response.json())
