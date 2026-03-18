@@ -1,5 +1,5 @@
 from fastapi import Request
-from ptc_server.services.llm_service import LLMService
+from ttc_server.services.llm_service import LLMService
 
 
 def get_llm_service(request: Request) -> LLMService:

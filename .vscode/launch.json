@@ -22,7 +22,7 @@
       "request": "launch",
       "module": "uvicorn",
       "args": [
-          "ptc_server.main:app",
+          "ttc_server.main:app",
           "--reload",
           "--host",
           "0.0.0.0",
@@ -38,7 +38,7 @@
       "module": "streamlit",
       "args": [
           "run",
-          "client/ptc_client/app.py",
+          "client/ttc_client/app.py",
           "--server.address",
           "0.0.0.0",
           "--server.port",

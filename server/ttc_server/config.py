@@ -1,12 +1,12 @@
 import os
 
 from dotenv import load_dotenv
-from ptc_core.file_helper import PROJECT_ROOT
+from ttc_core.file_helper import PROJECT_ROOT
 
 
 GEMINI_MODEL_NAME = "gemini-2.5-flash"
 
-ICS_PRODID = "-//prompt-to-calendar//EN"
+ICS_PRODID = "-//text-to-calendar//EN"
 
 
 load_dotenv(PROJECT_ROOT / ".env")  # loads variables from .env into environment

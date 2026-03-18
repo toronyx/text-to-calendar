@@ -1,4 +1,4 @@
-# Prompt to Calendar
+# Text to Calendar
 
 ## Idea
 
@@ -13,21 +13,21 @@ FastAPI backend with a Streamlit frontend. Probably just hosted as a web server 
 Separated into 3 main folders to reduce coupling
 
 ```
-prompt-to-calendar/
+text-to-calendar/
 ├── README.md
 ├── .env
 ├── pyproject.toml
 ├── client/                     # Streamlit frontend
-│   └── ptc_client/
+│   └── ttc_client/
 │       └── app.py
 │
 ├── core/                       # Shared models / types
-│   └── ptc_core/
+│   └── ttc_core/
 │       └── models/
 │           └── calendar.py
 │
 ├── server/                     # FastAPI backend
-│   └── ptc_server/
+│   └── ttc_server/
 │       ├── main.py
 │       ├── routes/
 │       │   └── endpoints.py

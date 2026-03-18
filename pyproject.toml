@@ -1,5 +1,5 @@
 [project]
-name = "prompt-to-calendar"
+name = "text-to-calendar"
 version = "0.1.0"
 description = "Turns a plain text input into an .ics file compatible with Google Calendar, iCloud Calendar, etc."
 authors = [
@@ -20,15 +20,15 @@ dependencies = [
 
 # Tells Poetry which folders are packages
 [[tool.poetry.packages]]
-include = "ptc_client"
+include = "ttc_client"
 from = "client"
 
 [[tool.poetry.packages]]
-include = "ptc_core"
+include = "ttc_core"
 from = "core"
 
 [[tool.poetry.packages]]
-include = "ptc_server"
+include = "ttc_server"
 from = "server"
 
 

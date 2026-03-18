@@ -2,8 +2,8 @@ import logging
 from typing import Iterator
 from google import genai
 
-from ptc_server.clients.llm.llm_client import LLMClient, LLMException
-from ptc_server.config import GEMINI_API_KEY, GEMINI_MODEL_NAME
+from ttc_server.clients.llm.llm_client import LLMClient, LLMException
+from ttc_server.config import GEMINI_API_KEY, GEMINI_MODEL_NAME
 
 logger = logging.getLogger(__name__)
 

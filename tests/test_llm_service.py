@@ -1,17 +1,17 @@
 from pathlib import Path
 
-import ptc_server
+import ttc_server
 import pytest
 
-from ptc_server.services.llm_service import LLMService, LLMParseError
-from ptc_server.mocks.mock_llm_client import MockLLMClient
+from ttc_server.services.llm_service import LLMService, LLMParseError
+from ttc_server.mocks.mock_llm_client import MockLLMClient
 
 
 def test_parse_response_as_json_with_example_model_response():
-    example_path = Path(ptc_server.mocks.__path__[0]) / "example_model_response.txt"
+    example_path = Path(ttc_server.mocks.__path__[0]) / "example_model_response.txt"
     response_text = example_path.read_text(encoding="utf-8")
 
-    service = LLMService(MockLLMClient(""))
+    service = LLMService(MockLLMClient())  # we aren't making any LLM calls
     parsed = service._parse_response_as_json(response_text)
 
     assert parsed["start"] == "20260330T140000Z"
@@ -22,7 +22,7 @@ def test_parse_response_as_json_with_example_model_response():
 
 
 def test_convert_json_to_calendar_event_adds_fields_and_parses_datetimes():
-    service = LLMService(MockLLMClient(""))
+    service = LLMService(MockLLMClient())  # we aren't making any LLM calls
     event_data = {
         "start": "20260330T140000Z",
         "end": "20260330T160000Z",

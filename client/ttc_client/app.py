@@ -1,5 +1,5 @@
-from ptc_core.models.calendar_event import CalendarEvent
-from ptc_core.utils.date_utils import format_date_range
+from ttc_core.models.calendar_event import CalendarEvent
+from ttc_core.utils.date_utils import format_date_range
 import streamlit as st
 import requests
 from streamlit.string_util import to_snake_case

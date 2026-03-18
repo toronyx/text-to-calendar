@@ -207,6 +207,6 @@ marimo/_lsp/
 __marimo__/
 
 # Project specific
-server/ptc_server/generated/
+server/ttc_server/generated/
 logs/
 .DS_Store

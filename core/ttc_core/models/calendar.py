@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from ptc_core.models.calendar_event import CalendarEvent
+from ttc_core.models.calendar_event import CalendarEvent
 from pydantic import BaseModel, Field
 
 
