@@ -2,6 +2,7 @@ from ptc_core.models.calendar_event import CalendarEvent
 from ptc_core.utils.date_utils import format_date_range
 import streamlit as st
 import requests
+from streamlit.string_util import to_snake_case
 
 API_URL = "http://localhost:8001"  # TODO 17-Mar-2026 move this somewhere better
 
@@ -49,7 +50,6 @@ if "calendar_event" in st.session_state:
         with st.container(horizontal_alignment="center"):
             with st.container(border=True, width="content", horizontal_alignment="left"):
                 st.subheader(calendar_event.summary)
-                # editable_text_field("Title", calendar_event.summary)
                 st.text(calendar_event.description, width=400)
                 st.text("⏰ " + f"{format_date_range(calendar_event.dtstart, calendar_event.dtend)}")
                 st.text("📍 " + calendar_event.location)
@@ -57,7 +57,7 @@ if "calendar_event" in st.session_state:
         if st.download_button(
             label="Download ICS File",
             data=lambda: create_ics_from_event(calendar_event),
-            file_name="event.ics",
+            file_name=f"event_{to_snake_case(calendar_event.summary)}.ics",  # TODO 18-Mar-2026 randomize this name!
             mime="text/calendar",
             type="primary",
         ):
