@@ -4,6 +4,7 @@ from pathlib import Path
 from ptc_core.ics_generator import calendar_to_ics
 from ptc_core.models.calendar import Calendar
 from ptc_core.models.calendar_event import CalendarEvent
+import ptc_server
 
 
 def test_calendar_to_ics_matches_fixture():
@@ -20,6 +21,6 @@ def test_calendar_to_ics_matches_fixture():
     calendar = Calendar(prodid="-//test//EN", method=None, events=[event])
     output = calendar_to_ics(calendar)
 
-    expected_path = Path(__file__).resolve().parents[0] / "fixtures" / "example_calendar.ics"
+    expected_path = Path(ptc_server.mocks.__path__[0]) / "example_calendar.ics"
     expected = expected_path.read_text(encoding="utf-8").replace("\r\n", "\n").strip()
     assert output.replace("\r\n", "\n").strip() == expected

@@ -208,3 +208,4 @@ __marimo__/
 
 # Project specific
 server/ptc_server/generated/
+logs/

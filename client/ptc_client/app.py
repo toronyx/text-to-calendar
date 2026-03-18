@@ -1,0 +1,89 @@
+from ptc_core.models.calendar_event import CalendarEvent
+from ptc_core.utils.date_utils import format_date_range
+import streamlit as st
+import requests
+
+API_URL = "http://localhost:8001"  # TODO 17-Mar-2026 move this somewhere better
+
+
+@st.cache_data
+def create_ics_from_event(event: CalendarEvent) -> str:
+    response = requests.post(f"{API_URL}/calendar_event_to_ics_file/", json=event.model_dump(mode="json"))
+    response.raise_for_status()
+    return response.text
+
+
+@st.fragment
+def editable_text_field(label: str, value: str, label_visibility: str = "visible", icon=None):
+    edit_mode_name = f"{label}_text_box_edit_mode"
+    text_name = f"{label}_text_box_text"
+    if edit_mode_name not in st.session_state:
+        st.session_state[edit_mode_name] = False
+    if text_name not in st.session_state:
+        st.session_state[text_name] = value
+
+    if st.session_state[edit_mode_name]:
+        st.session_state[text_name] = st.text_input(
+            label, st.session_state[text_name], label_visibility=label_visibility
+        )
+        if st.button("Save"):
+            st.session_state[edit_mode_name] = False
+    else:
+        if st.button(st.session_state[text_name], type="tertiary", icon=icon):
+            st.session_state[edit_mode_name] = True
+
+
+st.set_page_config(
+    page_title="Prompt to Calendar",
+    page_icon=":calendar:",
+    menu_items={
+        "About": "Tool to convert plaintext into a calendar event!",
+        "Report a Bug": "mailto:dev@taurho.co.uk",
+    },
+)
+
+st.title("📆 Prompt to Calendar")
+
+user_input = st.text_area(
+    "Paste your text below!", placeholder="e.g. take the dog for a walk this evening...", height=150
+)
+
+if st.button("Convert to Calendar", type="primary"):
+    if user_input.strip():
+        try:
+            with st.spinner("Creating your event..."):
+                response = requests.post(f"{API_URL}/prompt_to_calendar_event_object/", params={"prompt": user_input})
+            response.raise_for_status()
+
+            calendar_event = CalendarEvent.model_validate(response.json())
+
+            st.session_state["calendar_event"] = calendar_event
+        except requests.exceptions.RequestException as e:
+            st.error(f"Error: {e}")
+    else:
+        st.warning("Please enter some event details first.")
+
+if "calendar_event" in st.session_state:
+    try:
+        calendar_event: CalendarEvent = st.session_state["calendar_event"]
+        with st.container(horizontal_alignment="center"):
+            with st.container(border=True, width="content", horizontal_alignment="left"):
+                st.subheader(calendar_event.summary)
+                # editable_text_field("Title", calendar_event.summary)
+                st.text(calendar_event.description, width=400)
+                st.text("⏰ " + f"{format_date_range(calendar_event.dtstart, calendar_event.dtend)}")
+                st.text("📍 " + calendar_event.location)
+
+        if st.download_button(
+            label="Download ICS File",
+            data=lambda: create_ics_from_event(calendar_event),
+            file_name="event.ics",
+            mime="text/calendar",
+            type="primary",
+        ):
+            st.session_state["downloaded"] = True
+
+        if st.session_state.get("downloaded"):
+            st.balloons()
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error: {e}")

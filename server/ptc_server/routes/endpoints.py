@@ -2,10 +2,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 from ptc_core.ics_generator import calendar_to_ics
 from ptc_core.models.calendar import Calendar
+from ptc_core.models.calendar_event import CalendarEvent
 from ptc_server.app_services import get_llm_service
 from ptc_server.config import ICS_PRODID
 from ptc_server.services.llm_service import LLMService
@@ -21,9 +22,16 @@ def root() -> dict[str, str]:
     }
 
 
-@router.get("/prompt_to_ical/")
-def prompt_to_ical(llm_service: Annotated[LLMService, Depends(get_llm_service)], prompt: str):
+@router.post("/prompt_to_calendar_event_object/")
+def prompt_to_calendar_event_object(
+    llm_service: Annotated[LLMService, Depends(get_llm_service)], prompt: str
+) -> CalendarEvent:
     calendar_event = llm_service.calendar_event_from_prompt(prompt)
+    return calendar_event
+
+
+@router.post("/calendar_event_to_ics_file/")
+def calendar_event_to_ics_file(calendar_event: CalendarEvent):
     calendar = Calendar(prodid=ICS_PRODID, method=None, events=[calendar_event])
     ics_data = calendar_to_ics(calendar)
 
@@ -32,5 +40,4 @@ def prompt_to_ical(llm_service: Annotated[LLMService, Depends(get_llm_service)],
     filename = datetime.now().strftime("calendar_%Y%m%dT%H%M%SZ.ics")
     file_path = generated_files_dir / filename
     file_path.write_text(ics_data, encoding="utf-8")
-
     return FileResponse(path=file_path, media_type="text/calendar", filename=filename)

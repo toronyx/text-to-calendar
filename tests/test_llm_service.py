@@ -1,13 +1,14 @@
 from pathlib import Path
 
+import ptc_server
 import pytest
 
 from ptc_server.services.llm_service import LLMService, LLMParseError
-from tests.mocks.mock_llm_client import MockLLMClient
+from ptc_server.mocks.mock_llm_client import MockLLMClient
 
 
 def test_parse_response_as_json_with_example_model_response():
-    example_path = Path(__file__).resolve().parents[0] / "fixtures" / "example_model_response.txt"
+    example_path = Path(ptc_server.mocks.__path__[0]) / "example_model_response.txt"
     response_text = example_path.read_text(encoding="utf-8")
 
     service = LLMService(MockLLMClient(""))
