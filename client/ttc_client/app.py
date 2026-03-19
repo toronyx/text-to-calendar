@@ -34,9 +34,14 @@ st.sidebar.text("As well as supporting multiple events extracted from a single p
 
 if "placeholder" not in st.session_state:
     st.session_state["placeholder"] = random_placeholder()
-user_input = st.text_area("Paste your text below!", placeholder=st.session_state["placeholder"], height="content")
+user_input = st.text_area(
+    "Paste your text below!",
+    placeholder=st.session_state["placeholder"],
+    help="Paste some text into the box below, and we'll do our best to create a calendar event from it!",
+    height="content",
+)
 
-if st.button("Convert to Calendar", type="primary"):
+if st.button("Make it an event", type="primary"):
     if user_input.strip():
         try:
             with st.spinner("Creating your event..."):
@@ -58,13 +63,18 @@ if "calendar" in st.session_state:
             for calendar_event in calendar.events:
                 with st.container(border=True, width="content", horizontal_alignment="left"):
                     st.subheader(str(calendar_event.summary))
-                    st.text(str(calendar_event.description), width=400)
+                    st.text(str(calendar_event.description), width=300)
                     st.text("⏰ " + f"{format_date_range(calendar_event.dtstart, calendar_event.dtend)}")
                     if calendar_event.location:
                         st.text("📍 " + str(calendar_event.location))
 
+        st.success(
+            "Your event is ready! Download and open it to add it to a calendar of your choice,"
+            " whether that's Google Calendar, Outlook, iCalendar or whatever else!"
+        )
+
         if st.download_button(
-            label="Download ICS File",
+            label="Download",
             data=lambda: create_ics_from_calendar(calendar),
             file_name=f"{random_string()}.ics",
             mime="text/calendar",
