@@ -2,7 +2,6 @@ from datetime import datetime
 import json
 import uuid
 
-from ttc_core.models.calendar import Calendar
 from ttc_core.models.calendar_event import CalendarEvent
 from ttc_core.utils.date_utils import format_nice_date, format_nice_time
 from ttc_server.clients.llm.llm_client import LLMClient
