@@ -1,5 +1,6 @@
 from ttc_client.helpers import random_placeholder
 from ttc_core.models.calendar import Calendar
+from ttc_core.models.calendar_event import CalendarEvent
 from ttc_core.utils.date_utils import format_date_range
 import streamlit as st
 import requests
@@ -8,8 +9,13 @@ from ttc_server.config import TTC_API_URL
 
 
 @st.cache_data
-def create_ics_from_calendar(calendar: Calendar) -> str:
-    response = requests.post(f"{TTC_API_URL}/calendar_to_ics_file/", json=calendar.model_dump(mode="json"))
+def create_ics(calendar_or_event: Calendar | CalendarEvent) -> str:
+    if isinstance(calendar_or_event, Calendar):
+        response = requests.post(f"{TTC_API_URL}/calendar_to_ics_file/", json=calendar_or_event.model_dump(mode="json"))
+    elif isinstance(calendar_or_event, CalendarEvent):
+        response = requests.post(
+            f"{TTC_API_URL}/calendar_event_to_ics_file/", json=calendar_or_event.model_dump(mode="json")
+        )
     response.raise_for_status()
     return response.text
 
@@ -70,7 +76,10 @@ if "calendar" in st.session_state:
                         st.text("📍 " + str(calendar_event.location))
                 with col3.container(width="content"):
                     calendar_type = st.selectbox(
-                        "Add to calendar", ["Google", "Outlook", "Office365", "Yahoo"], label_visibility="collapsed"
+                        "Add to calendar",
+                        ["Google", "Outlook", "Office365", "Yahoo", "Apple"],
+                        label_visibility="collapsed",
+                        key=calendar_event.uid + "__selectbox",
                     )
                     try:
                         with st.spinner("Getting your link..."):
@@ -86,7 +95,17 @@ if "calendar" in st.session_state:
 
                     if f"link_dict_{calendar_event.uid}" in st.session_state:
                         link_dict = st.session_state[f"link_dict_{calendar_event.uid}"]
-                        st.link_button("Add to calendar", link_dict.get(calendar_type.lower()), type="primary")
+                        link = link_dict.get(calendar_type.lower())
+                        if link:
+                            st.link_button("Add to calendar", link, type="primary")
+                        else:
+                            st.download_button(
+                                label="Add to calendar",
+                                data=lambda: create_ics(calendar),
+                                file_name=f"{random_string()}.ics",
+                                mime="text/calendar",
+                                type="primary",
+                            )
 
         st.success(
             "Your event is ready! Download and open it to add it to a calendar of your choice,"
@@ -95,7 +114,7 @@ if "calendar" in st.session_state:
 
         if st.download_button(
             label="Download",
-            data=lambda: create_ics_from_calendar(calendar),
+            data=lambda: create_ics(calendar),
             file_name=f"{random_string()}.ics",
             mime="text/calendar",
             type="primary",

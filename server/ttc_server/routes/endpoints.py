@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import FileResponse
 from ttc_core.ics_generator import calendar_to_ics
 from ttc_core.models.calendar import Calendar
@@ -42,8 +42,14 @@ def calendar_to_ics_file(calendar: Calendar):
     return FileResponse(path=file_path, media_type="text/calendar", filename=filename)
 
 
+@router.post("/calendar_event_to_ics_file/")
+def calendar_event_to_ics_file(calendar_event: CalendarEvent):
+    calendar = Calendar(prodid=ICS_PRODID, method=None, events=[calendar_event])
+    return calendar_to_ics_file(calendar)
+
+
 @router.post("/calendar_event_links/")
-def calendar_event_links(calendar_event: CalendarEvent):
+def calendar_event_links(calendar_event: CalendarEvent, request: Request):
     generator = CalendarEventLinkGenerator(calendar_event)
     return {
         "google": generator.google(),
