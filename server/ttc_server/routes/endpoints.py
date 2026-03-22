@@ -6,8 +6,10 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import FileResponse
 from ttc_core.ics_generator import calendar_to_ics
 from ttc_core.models.calendar import Calendar
+from ttc_core.models.calendar_event import CalendarEvent
 from ttc_server.app_services import get_llm_service
 from ttc_server.config import ICS_PRODID
+from ttc_server.services.calendar_event_link_generator import CalendarEventLinkGenerator
 from ttc_server.services.llm_service import LLMService
 
 router = APIRouter()
@@ -38,3 +40,14 @@ def calendar_to_ics_file(calendar: Calendar):
     file_path = generated_files_dir / filename
     file_path.write_text(ics_data, encoding="utf-8")
     return FileResponse(path=file_path, media_type="text/calendar", filename=filename)
+
+
+@router.post("/calendar_event_links/")
+def calendar_event_links(calendar_event: CalendarEvent):
+    generator = CalendarEventLinkGenerator(calendar_event)
+    return {
+        "google": generator.google(),
+        "outlook": generator.outlook(),
+        "office365": generator.office365(),
+        "yahoo": generator.yahoo(),
+    }

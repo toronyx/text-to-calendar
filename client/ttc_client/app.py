@@ -61,12 +61,32 @@ if "calendar" in st.session_state:
         calendar: Calendar = st.session_state["calendar"]
         with st.container(horizontal_alignment="center"):
             for calendar_event in calendar.events:
-                with st.container(border=True, width="content", horizontal_alignment="left"):
+                col1, col2, col3 = st.columns([2, 5, 3])
+                with col2.container(border=True, width="content", horizontal_alignment="left"):
                     st.subheader(str(calendar_event.summary))
                     st.text(str(calendar_event.description), width=300)
                     st.text("⏰ " + f"{format_date_range(calendar_event.dtstart, calendar_event.dtend)}")
                     if calendar_event.location:
                         st.text("📍 " + str(calendar_event.location))
+                with col3.container(width="content"):
+                    calendar_type = st.selectbox(
+                        "Add to calendar", ["Google", "Outlook", "Office365", "Yahoo"], label_visibility="collapsed"
+                    )
+                    try:
+                        with st.spinner("Getting your link..."):
+                            response = requests.post(
+                                f"{TTC_API_URL}/calendar_event_links/", json=calendar_event.model_dump(mode="json")
+                            )
+                        response.raise_for_status()
+
+                        link_dict: dict = response.json()
+                        st.session_state[f"link_dict_{calendar_event.uid}"] = link_dict
+                    except requests.exceptions.RequestException as e:
+                        st.error(f"Error: {e}")
+
+                    if f"link_dict_{calendar_event.uid}" in st.session_state:
+                        link_dict = st.session_state[f"link_dict_{calendar_event.uid}"]
+                        st.link_button("Add to calendar", link_dict.get(calendar_type.lower()), type="primary")
 
         st.success(
             "Your event is ready! Download and open it to add it to a calendar of your choice,"
