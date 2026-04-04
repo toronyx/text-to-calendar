@@ -1,4 +1,6 @@
-from ttc_client.helpers import random_placeholder
+from zoneinfo import ZoneInfo
+
+from ttc_client.helpers import get_iana_timezone, random_placeholder
 from ttc_core.models.calendar import Calendar
 from ttc_core.models.calendar_event import CalendarEvent
 from ttc_core.utils.date_utils import format_date_range
@@ -47,11 +49,18 @@ user_input = st.text_area(
     height="content",
 )
 
+iana_timezone = get_iana_timezone()
 if st.button("Make it an event", type="primary"):
     if user_input.strip():
         try:
             with st.spinner("Creating your event..."):
-                response = requests.post(f"{TTC_API_URL}/prompt_to_calendar_object/", params={"prompt": user_input})
+                response = requests.post(
+                    f"{TTC_API_URL}/prompt_to_calendar_object/",
+                    params={
+                        "prompt": user_input,
+                        "iana_timezone": iana_timezone,
+                    },
+                )
             response.raise_for_status()
 
             calendar = Calendar.model_validate(response.json())
@@ -71,7 +80,10 @@ if "calendar" in st.session_state:
                 with col2.container(border=True, width="content", horizontal_alignment="left"):
                     st.subheader(str(calendar_event.summary))
                     st.text(str(calendar_event.description), width=300)
-                    st.text("⏰ " + f"{format_date_range(calendar_event.dtstart, calendar_event.dtend)}")
+                    st.text(
+                        "⏰ "
+                        + f"{format_date_range(calendar_event.dtstart.astimezone(ZoneInfo(iana_timezone)), calendar_event.dtend.astimezone(ZoneInfo(iana_timezone)))}"
+                    )
                     if calendar_event.location:
                         st.text("📍 " + str(calendar_event.location))
                 with col3.container(width="content"):

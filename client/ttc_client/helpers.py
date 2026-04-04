@@ -1,4 +1,5 @@
 import random
+from streamlit_javascript import st_javascript
 
 
 def random_placeholder():
@@ -19,3 +20,10 @@ def random_placeholder():
     items = list(placeholders.keys())
     inverted_weights = [1 / w for w in list(placeholders.values())]
     return random.choices(items, weights=inverted_weights, k=1)[0]
+
+
+def get_iana_timezone() -> str:
+    """
+    e.g. America/New_York
+    """
+    return st_javascript("Intl.DateTimeFormat().resolvedOptions().timeZone")

@@ -14,7 +14,8 @@ dependencies = [
     "google-genai (>=1.67.0,<2.0.0)",
     "uvicorn (>=0.42.0,<0.43.0)",
     "dotenv (>=0.9.9,<0.10.0)",
-    "pathlib (>=1.0.1,<2.0.0)"
+    "pathlib (>=1.0.1,<2.0.0)",
+    "streamlit-javascript (>=0.1.5,<0.2.0)"
 ]
 
 

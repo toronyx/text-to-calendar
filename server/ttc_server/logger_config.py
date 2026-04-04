@@ -12,7 +12,7 @@ def setup_logging():
 
     # Root logger
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
@@ -28,6 +28,7 @@ def setup_logging():
         when="midnight",  # rotate daily
         interval=1,
     )
+    fh.setLevel(logging.INFO)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 

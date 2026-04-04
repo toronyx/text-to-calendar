@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from pathlib import Path
 from typing import Annotated
 
@@ -14,6 +15,8 @@ from ttc_server.services.llm_service import LLMService
 
 router = APIRouter()
 
+logger = logging.getLogger(__name__)
+
 
 @router.get("/")
 def root() -> dict[str, str]:
@@ -24,8 +27,11 @@ def root() -> dict[str, str]:
 
 
 @router.post("/prompt_to_calendar_object/")
-def prompt_to_calendar_object(llm_service: Annotated[LLMService, Depends(get_llm_service)], prompt: str) -> Calendar:
-    calendar_events = llm_service.calendar_events_from_prompt(prompt)
+def prompt_to_calendar_object(
+    llm_service: Annotated[LLMService, Depends(get_llm_service)], prompt: str, iana_timezone: str
+) -> Calendar:
+    logger.info(f"User timezone is {iana_timezone}")
+    calendar_events = llm_service.calendar_events_from_prompt(prompt, iana_timezone)
     calendar = Calendar(prodid=ICS_PRODID, method=None, events=calendar_events)
     return calendar
 
