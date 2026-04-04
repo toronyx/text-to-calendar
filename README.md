@@ -63,13 +63,13 @@ So, you paste some text in to the box, press the button, and it'll produce one o
  - If the text describes multiple events, e.g. an outbound and return train journey, multiple events will be extracted .
  - Each event can be added to any major online calendar provider (Google, Outlook, Apple) with the press of a button.
  - All events can be downloaded as a single `.ics` file, compatible with all major calendar providers.
+ - Timezone support - events will be created and shown in the user's local timezone
 
 #### Features not yet supported
 
  - All day events
  - Recurring events (e.g. weekly, daily)
  - Invitees
- - Support for different timezones
 
 ### Tech stack
 
