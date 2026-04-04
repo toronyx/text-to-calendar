@@ -1,11 +1,22 @@
 <!-- omit in toc --> 
 # Text to Calendar
 
+***Keywords**: FastAPI, API, Streamlit, Python, Cloud deployment, LLMs, gen-ai, gemini, AI, Clean architecture, SOLID principles, OOP*
+
+<br>
+
 Test it out at [text-to-calendar.taurho.co.uk](https://text-to-calendar.taurho.co.uk)
 
 Basic idea: throw in some plain text, an LLM will take a look, pull the information into a standard `iCalendar` format, and allow you to apply it to a calendar of your choosing.
 
-<photos/videos>
+
+https://github.com/user-attachments/assets/849e15b3-8983-480b-8ee9-ff5afc7a2146
+
+### Screenshots
+
+<img width="600" height="558" alt="Screenshot 2026-04-04 at 19 55 25" src="https://github.com/user-attachments/assets/69caebca-bb43-4499-b236-fd1e6114e6de" />
+<img width="600" height="924" alt="Screenshot 2026-04-04 at 19 55 59" src="https://github.com/user-attachments/assets/67fef71c-7532-43c9-8220-a41cf46d858d" />
+<img width="600" height="660" alt="Screenshot 2026-04-04 at 19 57 21" src="https://github.com/user-attachments/assets/0ee34dc5-524a-4169-9eab-e6cacd16ce6e" />
 
 <!-- omit in toc --> 
 ### Table of contents
@@ -18,8 +29,8 @@ Basic idea: throw in some plain text, an LLM will take a look, pull the informat
   - [Architecture and Design](#architecture-and-design)
   - [Deployment](#deployment)
   - [The iCalendar format](#the-icalendar-format)
-- [TODO: Getting started](#todo-getting-started)
-- [TODO: Extensions](#todo-extensions)
+- [Getting started](#getting-started)
+- [Extensions](#extensions)
 - [License](#license)
 - [Appendix](#appendix)
   - [Folder structure](#folder-structure)
@@ -29,6 +40,8 @@ Basic idea: throw in some plain text, an LLM will take a look, pull the informat
 Gmail used to have a nifty feature (and maybe still does?) where if you get an email from, say, Trainline, with some train tickets attached, Google would extract those train times and add it straight to your calendar. I have no idea what happened to it.
 
 I love my calendar, and anyone who knows me knows I have EVERYTHING on it, from going to work down to brushing my teeth. So sometimes, I'm going to something and I have this big wall of text about it and I want to add it to my calendar. Usually I would just meticulously put in the information myself, but eventually I decided to make this! Throw in some messy text, get nice tidy calendar events out.
+
+This project was also made to flex some basic app-building and API-design skills, as well as to practice self-hosting and deployment to VMs. Code-writing is great but I feel like without some deployment knowledge it's only half a skillset! And cloud-deployment is something I've long been interested in doing more of.
 
 ## How it works
 
@@ -93,11 +106,20 @@ https://calendar.google.com/calendar/render?action=TEMPLATE&text=EVENT_TITLE&dat
 
 Opening one of these immediately creates a calendar event with the given fields already populated with those initial values. Look, [try opening this one](https://calendar.google.com/calendar/render?action=TEMPLATE&text=EVENT_TITLE&dates=START/END&details=DESCRIPTION&location=LOCATION). This is what allows for the "Add to Calendar" button - we simply generate a link with the correct information and it'll immediately open the event creation screen.
 
-## TODO: Getting started 
+## Getting started 
 
-TODO: How to run, and use.
+So as mentioned in the [deployment section](#deployment), I've deployed this on a single VM. To run this you just need to deploy the FastAPI server, the Streamlit server, and the set up an `.env` file with these variables:
+ - `TTC_API_URL` - URL of the FastAPI server - if its on the same machine it'll be a localhost
+ - `GEMINI_API_KEY`
+ - `DOMAIN_NAME` - domain name that makes up the uuid of the event. This is invisible metadata that won't be shown to the user but is available in the `.ics` file.
 
-## TODO: Extensions
+## Extensions
+
+I've already listed some missing features in [the features not yet supported](#features-not-yet-supported) section, but I'll talk a bit more about possibilities here. To be honest one of the things I like about this project is how bounded it is - there is a clear core functionality and anything beyond it is bells and whistles.
+
+In addition to what's previously been mentioned I think having one-click calendar integration could be cool, i.e. you wouldn't need to hit save on the event, but to do that you'd need to integrate the API for whatever calendar service you're using, and it'd get real messy with user logins and security would need to be much more serious (and it might not even be possible).
+
+You could also setup a proper login system that would allow users to configure some sensible defaults, like where they live - to help make the location info more detailed, i.e. is "trip to Aberdeen" to Scotland or South Dakota? - and to determine their timezone. It may also be possible to get timezone info from the phone itself? But that's probably a whole can of worms. They could also configure common invitees; say you add a "Jess" to your user config with the email jess@example.com; you could then make it so any invite that mentions "Jess" also adds her to the invitees list so she gets an email when the event is made.
 
 ## License
 
