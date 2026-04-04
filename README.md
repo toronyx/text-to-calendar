@@ -7,10 +7,15 @@
 
 Test it out at [text-to-calendar.taurho.co.uk](https://text-to-calendar.taurho.co.uk)
 
+<br>
+
 Basic idea: throw in some plain text, an LLM will take a look, pull the information into a standard `iCalendar` format, and allow you to apply it to a calendar of your choosing.
 
 
 https://github.com/user-attachments/assets/849e15b3-8983-480b-8ee9-ff5afc7a2146
+
+<br>
+
 
 ### Screenshots
 
