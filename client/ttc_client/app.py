@@ -39,6 +39,7 @@ st.sidebar.text("When Text to Calendar makes a calendar event, it extracts all k
 features = ["Event title", "Description", "Start/end time", "Location"]
 st.sidebar.markdown("- " + "\n- ".join(features))
 st.sidebar.text("As well as supporting multiple events extracted from a single piece of text!")
+st.sidebar.markdown("[View on GitHub](https://github.com/toronyx/text-to-calendar/)")
 
 if "placeholder" not in st.session_state:
     st.session_state["placeholder"] = random_placeholder()
