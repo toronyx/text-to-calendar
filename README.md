@@ -122,7 +122,7 @@ I've already listed some missing features in [the features not yet supported](#f
 
 In addition to what's previously been mentioned I think having one-click calendar integration could be cool, i.e. you wouldn't need to hit save on the event, but to do that you'd need to integrate the API for whatever calendar service you're using, and it'd get real messy with user logins and security would need to be much more serious (and it might not even be possible).
 
-You could also setup a proper login system that would allow users to configure some sensible defaults, like where they live - to help make the location info more detailed, i.e. is "trip to Aberdeen" to Scotland or South Dakota? - and to determine their timezone. It may also be possible to get timezone info from the phone itself? But that's probably a whole can of worms. They could also configure common invitees; say you add a "Jess" to your user config with the email jess@example.com; you could then make it so any invite that mentions "Jess" also adds her to the invitees list so she gets an email when the event is made.
+You could also setup a proper login system that would allow users to configure some sensible defaults, like where they live - to help make the location info more detailed, i.e. is "trip to Aberdeen" to Scotland or South Dakota? They could also configure common invitees; say you add a "Jess" to your user config with the email jess@example.com; you could then make it so any invite that mentions "Jess" also adds her to the invitees list so she gets an email when the event is made.
 
 ## License
 
