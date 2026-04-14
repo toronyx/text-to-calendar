@@ -1,4 +1,7 @@
 import random
+from requests import Response
+import requests
+import streamlit as st
 from streamlit_javascript import st_javascript
 
 
@@ -27,3 +30,17 @@ def get_iana_timezone() -> str:
     e.g. America/New_York
     """
     return st_javascript("Intl.DateTimeFormat().resolvedOptions().timeZone")
+
+
+def catch_request_errors(func, *args, **kwargs) -> Response | None:
+    """
+    Executes func(*args, **kwargs) and handles request errors with Streamlit.
+    """
+    try:
+        return func(*args, **kwargs)
+    except requests.exceptions.Timeout:
+        st.error("Request timed out! Try again in a moment.")
+        return None
+    except requests.exceptions.RequestException as e:
+        st.error(f"API Error: {e}")
+        return None

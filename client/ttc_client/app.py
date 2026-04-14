@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 import requests
 import streamlit as st
 from ttc_client.fastapi_client import FastAPIClient
-from ttc_client.helpers import get_iana_timezone, random_placeholder
+from ttc_client.helpers import catch_request_errors, get_iana_timezone, random_placeholder
 from ttc_core.models.calendar import Calendar
 from ttc_core.models.calendar_event import CalendarEvent
 from ttc_core.utils.date_utils import format_date_range
@@ -24,7 +24,8 @@ def create_ics(calendar_or_event: Calendar | CalendarEvent) -> str:
         endpoint = "calendar_to_ics_file/"
     elif isinstance(calendar_or_event, CalendarEvent):
         endpoint = "calendar_event_to_ics_file/"
-    response = client.post(endpoint, json=calendar_or_event.model_dump(mode="json"))
+
+    response = catch_request_errors(client.post, endpoint, json=calendar_or_event.model_dump(mode="json"))
     return response.text
 
 
@@ -63,7 +64,8 @@ if st.button("Make it an event", type="primary"):
     if user_input.strip():
         try:
             with st.spinner("Creating your event..."):
-                response = client.post(
+                response = catch_request_errors(
+                    client.post,
                     "prompt_to_calendar_object/",
                     params={
                         "prompt": user_input,
@@ -102,7 +104,9 @@ if "calendar" in st.session_state:
                     )
                     try:
                         with st.spinner("Getting your link..."):
-                            response = client.post("calendar_event_links/", json=calendar_event.model_dump(mode="json"))
+                            response = catch_request_errors(
+                                client.post, "calendar_event_links/", json=calendar_event.model_dump(mode="json")
+                            )
 
                         if response:
                             link_dict: dict = response.json()
