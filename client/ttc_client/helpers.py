@@ -42,5 +42,5 @@ def catch_request_errors(func, *args, **kwargs) -> Response | None:
         st.error("Request timed out! Try again in a moment.")
         return None
     except requests.exceptions.RequestException as e:
-        st.error(f"API Error: {e}")
+        st.error(f"API Error: {e.response.json().get('detail', str(e))}")
         return None
